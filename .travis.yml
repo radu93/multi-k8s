@@ -1,0 +1,24 @@
+language: generic
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t radu93/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true radu93/react-test npm test
+
+after_success:
+  - docker build -t radu93/multi-client ./client
+  - docker build -t radu93/multi-nginx ./nginx
+  - docker build -t radu93/multi-server ./server
+  - docker build -t radu93/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to the docker hub
+  - docker push radu93/multi-client
+  - docker push radu93/multi-nginx
+  - docker push radu93/multi-server
+  - docker push radu93/multi-worker
