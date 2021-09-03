@@ -17,7 +17,7 @@
         },
         {
             "name": "worker",
-            "image": "radu93/mutli-worker",
+            "image": "radu93/multi-worker",
             "hostname": "worker",
             "essential": false,
             "memory": 128
